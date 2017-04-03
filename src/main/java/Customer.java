@@ -1,6 +1,7 @@
 import org.sql2o.*;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 public class Customer {
   private String email;
@@ -61,6 +62,19 @@ public class Customer {
       return con.createQuery(sql)
         .addParameter("id", id)
         .executeAndFetchFirst(Customer.class);
+    }
+  }
+
+  public static Customer findByEmail(String email) {
+    try (Connection con = DB.sql2o.open()) {
+      String sql = "SELECT * FROM customers WHERE email = :email;";
+      Customer foundCustomer = con.createQuery(sql)
+        .addParameter("email", email)
+        .executeAndFetchFirst(Customer.class);
+      if (foundCustomer == null) {
+        throw new NoSuchElementException("No customer with that email.");
+      }
+      return foundCustomer;
     }
   }
 

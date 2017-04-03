@@ -1,3 +1,11 @@
 <!--index.vtl-->
-
+<div class="row">
+  <div class="col-md-8 col-md-offset-2">
+      #foreach($product in $products)
+        <h4><a href="/products/$product.getId()">$product.getName()</a></h4>
+        <h5>$product.getDescription()</h5>
+        <h5>$product.getPrice()</h5>
+      #end
+  </div>
+</div>
 <!--index.vtl-->

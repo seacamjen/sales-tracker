@@ -1,0 +1,11 @@
+body {
+  padding-top: 70px;
+}
+
+#loginForm {
+  margin-right: 15px;
+}
+
+#loginForm > .form-group {
+  margin: 15px;
+}

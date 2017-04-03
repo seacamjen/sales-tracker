@@ -5,9 +5,42 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link rel="stylesheet" href="/app.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <script src="/js/scripts.js"></script>
   </head>
   <body>
+    <nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="/">Home</a>
+        </div>
+        <ul class="nav navbar-nav">
+          <li><a href="/admin">Manager</a></li>
+        </ul>
+        #if($user)
+          <p class="navbar-text navbar-right">Signed in as $user.getName()</p><a href="/logout" type="button" class="btn btn-default navbar-btn navbar-right">Sign out</a>
+        #else
+          <button class="btn btn-default navbar-btn navbar-right" id="dLabel" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Login<span class="caret"></span></button>
+          <form id="loginForm" class="dropdown-menu pull-right" aria-labelledby="dLabel" action="/login" method="post">
+            <div class="form-group">
+              <label for="name">name</label>
+              <input class="form-control" type="text" name="name" required>
+              <label for="email">email</label>
+              <input class="form-control" type="text" name="email" required>
+            </div>
+            <div class="form-group">
+              <button type="submit" class="btn btn-block btn-success">Login</button>
+            </div>
+          </form>
+        #end
+        <form class="navbar-form navbar-right" action="/search" method="post">
+          <div class="form-group">
+            <input type="text" name="searchInput" class="form-control" placeholder="search" required>
+          </div>
+          <button type="submit" class="btn btn-default" name="button"><span class="glyphicon glyphicon-search"></span></button>
+        </form>
+      </div>
+    </nav>
     <!-- begin inner template-->
     <div class="container">
       #parse( $template )

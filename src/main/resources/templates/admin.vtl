@@ -1,0 +1,53 @@
+<div class="row">
+  <div class="col-md-4 col-md-offset-2">
+    <div class="well">
+      <h2>Monthly Sales</h2>
+      #if($monthlyTotal)
+        <h4>$monthlyTotal</h4>
+      #else
+        <h4>No sales this month.</h4>
+      #end
+      <!-- add sales goal -->
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="well">
+      <h2>Quarterly Sales</h2>
+      #if($quarterlyTotal)
+        <h4>$quarterlyTotal</h4>
+      #else
+        <h4>No sales this quarter.</h4>
+      #end
+      <!-- add sales goal -->
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-8 col-md-offset-2">
+    <div class="well">
+      <form class="" action="/products/new" method="post">
+        <label for="productName">name</label>
+        <input type="text" name="productName" class="form-control" required>
+        <label for="productPrice">Price</label>
+        <input type="number" name="productPrice" class="form-control" required>
+        <label for="productDescription">Description</label>
+        <input type="text" name="productDescription" class="form-control" required>
+        <button type="submit"class="btn btn-primary">Add Product</button>
+      </form>
+    </div>
+    <div class="well">
+      <table class="table table-condensed table-hover">
+        <tr>
+          <th>Product Name</th>
+          <th>Product Price</th>
+        </tr>
+        #foreach($product in $products)
+          <tr>
+            <td>$product.getName()</td>
+            <td>$product.getPrice()</td>
+          </tr>
+        #end
+      </table>
+    </div>
+  </div>
+</div>
