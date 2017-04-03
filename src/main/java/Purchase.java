@@ -1,5 +1,6 @@
 import org.sql2o.*;
 import java.util.List;
+import java.util.Map;
 import java.sql.Timestamp;
 import java.util.Date;
 
@@ -87,6 +88,43 @@ public class Purchase {
         .addParameter("productId", productId)
         .addParameter("id", id)
         .executeUpdate();
+    }
+  }
+
+  public void setPurchaseDate() {
+    try (Connection con = DB.sql2o.open()) {
+      String sql = "UPDATE purchases SET purchasedate = (CURRENT_DATE - INTERVAL '100 days') WHERE id = :id;";
+      con.createQuery(sql)
+        .addParameter("id", id)
+        .executeUpdate();
+    }
+  }
+
+  public static List<Map<String,Object>> monthlySales() {
+    try(Connection con = DB.sql2o.open()) {
+      String sql = "SELECT purchases.purchaseDate, products.name, products.description, products.price FROM products INNER JOIN purchases ON products.id = purchases.productId WHERE purchases.purchaseDate > (CURRENT_DATE - INTERVAL '30 days');";
+      return con.createQuery(sql).executeAndFetchTable().asList();
+    }
+  }
+
+  public static List<Map<String,Object>> quarterlySales() {
+    try(Connection con = DB.sql2o.open()) {
+      String sql = "SELECT purchases.purchaseDate, products.name, products.description, products.price FROM products INNER JOIN purchases ON products.id = purchases.productId WHERE purchases.purchaseDate > (CURRENT_DATE - INTERVAL '65 days');";
+      return con.createQuery(sql).executeAndFetchTable().asList();
+    }
+  }
+
+  public static Integer monthlyTotalSales() {
+    try(Connection con = DB.sql2o.open()) {
+      String sql = "SELECT SUM(products.price) FROM products INNER JOIN purchases ON products.id = purchases.productId WHERE purchases.purchaseDate > (CURRENT_DATE - INTERVAL '30 days');";
+      return con.createQuery(sql).executeScalar(Integer.class);
+    }
+  }
+
+  public static Integer quarterlyTotalSales() {
+    try(Connection con = DB.sql2o.open()) {
+      String sql = "SELECT SUM(products.price) FROM products INNER JOIN purchases ON products.id = purchases.productId WHERE purchases.purchaseDate > (CURRENT_DATE - INTERVAL '65 days');";
+      return con.createQuery(sql).executeScalar(Integer.class);
     }
   }
 
