@@ -155,4 +155,21 @@ public class CustomerTest {
     assertEquals(rightNow.getDay(), purchase2Date.getDay());
   }
 
+  @Test
+  public void getAdmin_returnsFalseForCustomer() {
+    Customer newCustomer = new Customer("randy@email.com", "Randy");
+    assertFalse(newCustomer.getAdmin());
+  }
+
+  @Test
+  public void setAdmin_makesCustomerAnAdmin_true() {
+    Customer newCustomer = new Customer("randy@email.com", "Randy");
+    newCustomer.save();
+    assertFalse(newCustomer.getAdmin());
+    assertFalse(Customer.find(newCustomer.getId()).getAdmin());
+    newCustomer.setAdmin();
+    assertTrue(newCustomer.getAdmin());
+    assertTrue(Customer.find(newCustomer.getId()).getAdmin());
+  }
+
 }

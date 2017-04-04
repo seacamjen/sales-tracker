@@ -21,8 +21,10 @@ public class App {
     get("/admin", (request, response) -> {
       Map<String, Object> model = new HashMap<String, Object>();
       model.put("products", Product.all());
+      model.put("customers", Customer.all());
       model.put("monthlyTotal", Purchase.monthlyTotalSales());
       model.put("quarterlyTotal", Purchase.quarterlyTotalSales());
+      model.put("user", request.session().attribute("user"));
       model.put("template", "templates/admin.vtl");
       return new ModelAndView(model, layout);
     }, new VelocityTemplateEngine());
@@ -58,6 +60,14 @@ public class App {
       }
       request.session().attribute("user", customer);
       response.redirect("/");
+      return new ModelAndView(model, layout);
+    }, new VelocityTemplateEngine());
+
+    post("/customers/:id/makeAdmin", (request, response) -> {
+      Map<String, Object> model = new HashMap<String, Object>();
+      Customer customer = Customer.find(Integer.parseInt(request.params(":id")));
+      customer.setAdmin();
+      response.redirect("/admin");
       return new ModelAndView(model, layout);
     }, new VelocityTemplateEngine());
   }

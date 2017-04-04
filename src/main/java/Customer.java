@@ -7,10 +7,12 @@ public class Customer {
   private String email;
   private String name;
   private int id;
+  private boolean admin;
 
   public Customer(String email, String name) {
     this.email = email;
     this.name = name;
+    this.admin = false;
   }
 
   public String getEmail() {
@@ -25,6 +27,21 @@ public class Customer {
     return id;
   }
 
+  public boolean getAdmin() {
+    return admin;
+  }
+
+  public void setAdmin() {
+    this.admin = true;
+    try (Connection con = DB.sql2o.open()) {
+      String sql = "UPDATE customers SET (admin) = (:admin) WHERE id = :id;";
+      con.createQuery(sql)
+        .addParameter("admin", this.admin)
+        .addParameter("id", this.id)
+        .executeUpdate();
+    }
+  }
+
   @Override
   public boolean equals(Object otherCustomer) {
     if (!(otherCustomer instanceof Customer)) {
@@ -33,16 +50,18 @@ public class Customer {
       Customer newCustomer = (Customer) otherCustomer;
       return this.getEmail().equals(newCustomer.getEmail()) &&
              this.getName().equals(newCustomer.getName()) &&
+             this.getAdmin() == newCustomer.getAdmin() &&
              this.getId() == newCustomer.getId();
     }
   }
 
   public void save() {
     try (Connection con = DB.sql2o.open()) {
-      String sql = "INSERT INTO customers (email, name) VALUES (:email, :name);";
+      String sql = "INSERT INTO customers (email, name, admin) VALUES (:email, :name, :admin);";
       this.id = (int) con.createQuery(sql, true)
         .addParameter("email", email)
         .addParameter("name", name)
+        .addParameter("admin", admin)
         .executeUpdate()
         .getKey();
     }
@@ -52,6 +71,7 @@ public class Customer {
     try (Connection con = DB.sql2o.open()) {
       String sql = "SELECT * FROM customers;";
       return con.createQuery(sql)
+        // .throwOnMappingFailure(false)
         .executeAndFetch(Customer.class);
     }
   }
@@ -61,6 +81,7 @@ public class Customer {
       String sql = "SELECT * FROM customers WHERE id = :id;";
       return con.createQuery(sql)
         .addParameter("id", id)
+        // .throwOnMappingFailure(false)
         .executeAndFetchFirst(Customer.class);
     }
   }
@@ -70,6 +91,7 @@ public class Customer {
       String sql = "SELECT * FROM customers WHERE email = :email;";
       Customer foundCustomer = con.createQuery(sql)
         .addParameter("email", email)
+        // .throwOnMappingFailure(false)
         .executeAndFetchFirst(Customer.class);
       if (foundCustomer == null) {
         throw new NoSuchElementException("No customer with that email.");
@@ -104,6 +126,7 @@ public class Customer {
       String sql = "SELECT * FROM customers WHERE lower(name) LIKE lower(:newInput) OR lower(email) LIKE lower(:newInput);";
       return con.createQuery(sql)
         .addParameter("newInput", newInput)
+        // .throwOnMappingFailure(false)
         .executeAndFetch(Customer.class);
     }
   }
