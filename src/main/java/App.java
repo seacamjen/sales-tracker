@@ -59,6 +59,7 @@ public class App {
       Map<String, Object> model = new HashMap<String, Object>();
       model.put("product", Product.find(Integer.parseInt(request.params(":id"))));
       model.put("user", request.session().attribute("user"));
+      model.put("categories", Category.all());
       model.put("template", "templates/product.vtl");
       return new ModelAndView(model, layout);
     }, new VelocityTemplateEngine());
@@ -69,6 +70,26 @@ public class App {
       customer.purchase(Integer.parseInt(request.params(":id")));
       String url = String.format("/customers/%d", customer.getId());
       response.redirect(url);
+      return new ModelAndView(model, layout);
+    }, new VelocityTemplateEngine());
+
+    post("/products/:id/update", (request, response) -> {
+      Map<String, Object> model = new HashMap<String, Object>();
+      String productName = request.queryParams("productName");
+      int productPrice = Integer.parseInt(request.queryParams("productPrice"));
+      String productDescription = request.queryParams("productDescription");
+      int productCategory = Integer.parseInt(request.queryParams("productCategory"));
+      Product product = Product.find(Integer.parseInt(request.params(":id")));
+      product.update(productName, productPrice, productDescription, productCategory);
+      response.redirect(request.headers("Referer"));
+      return new ModelAndView(model, layout);
+    }, new VelocityTemplateEngine());
+
+    post("/products/:id/delete", (request, response) -> {
+      Map<String, Object> model = new HashMap<String, Object>();
+      Product product = Product.find(Integer.parseInt(request.params(":id")));
+      product.delete();
+      response.redirect("/");
       return new ModelAndView(model, layout);
     }, new VelocityTemplateEngine());
 
@@ -131,6 +152,14 @@ public class App {
       String name = request.queryParams("name");
       String email = request.queryParams("email");
       customer.update(email, name);
+      response.redirect(request.headers("Referer"));
+      return new ModelAndView(model, layout);
+    }, new VelocityTemplateEngine());
+
+    post("/customers/:id/delete", (request, response) -> {
+      Map<String, Object> model = new HashMap<String, Object>();
+      Customer customer = Customer.find(Integer.parseInt(request.params(":id")));
+      customer.delete();
       response.redirect(request.headers("Referer"));
       return new ModelAndView(model, layout);
     }, new VelocityTemplateEngine());

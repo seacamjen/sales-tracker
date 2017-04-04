@@ -1,6 +1,9 @@
 <div class="row">
   <div class="col-md-8 col-md-offset-2">
     <div class="well">
+      #if ($user.getAdmin())
+      <button type="button" class="btn btn-default" data-toggle="modal" data-target="#updateProductModal">Update</button>
+      #end
       <div class="row">
         <div class="col-md-12">
           <img src="/images/placeholder.png" alt="placeholder image" />
@@ -65,6 +68,49 @@
           </form>
         #end
         <button type="button" class="btn btn-default pull-right" data-dismiss="modal">Continue Shopping</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+
+<div class="modal fade" id="updateProductModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Product Details</h4>
+      </div>
+      <div class="modal-body">
+        <form id="updateProduct" action="/products/$product.getId()/update" method="post">
+          <div class="form-group">
+            <label for="productName">Name</label>
+            <input value="$product.getName()" type="text" name="productName" class="form-control" required>
+            <label for="productPrice">Price</label>
+            <input value="$product.getPrice()" type="number" name="productPrice" class="form-control" required>
+            <label for="productDescription">Description</label>
+            <input value="$product.getDescription()" type="text" name="productDescription" class="form-control" required>
+            <label for="productCategory">Category</label>
+            <select class="form-control" name="productCategory" required>
+              #foreach($category in $categories)
+                #if ($category.getId() == $product.getCategoryId())
+                  <option selected value="$category.getId()">$category.getName()</option>
+                #else
+                  <option value="$category.getId()">$category.getName()</option>
+                #end
+              #end
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <form action="/products/$product.getId()/delete" method="post">
+          <button class="btn btn-danger pull-left" type="submit" name="button">Delete</button>
+        </form>
+        <button type="submit" form="updateProduct" class="btn btn-success pull-right">Update</button>
+        <button type="button" class="btn btn-default pull-right" data-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
