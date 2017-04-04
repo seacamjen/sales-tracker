@@ -125,7 +125,7 @@ public class CustomerTest {
   public void purchase_customerCanPurchaseAProducr_true() {
     Customer newCustomer = new Customer("randy@email.com", "Randy");
     newCustomer.save();
-    Product testProduct = new Product("Jersey", 10, "Awesome Jersey");
+    Product testProduct = new Product("Jersey", 10, "Awesome Jersey", 1);
     testProduct.save();
     newCustomer.purchase(testProduct.getId());
     Timestamp rightNow = new Timestamp(new Date().getTime());
@@ -138,9 +138,9 @@ public class CustomerTest {
   public void getHistory_returnsAllProductsPurchased_List() {
     Customer newCustomer = new Customer("randy@email.com", "Randy");
     newCustomer.save();
-    Product testProduct1 = new Product("Jersey", 10, "Awesome Jersey");
+    Product testProduct1 = new Product("Jersey", 10, "Awesome Jersey", 1);
     testProduct1.save();
-    Product testProduct2 = new Product("Ball", 20, "Awesome Ball");
+    Product testProduct2 = new Product("Ball", 20, "Awesome Ball", 2);
     testProduct2.save();
     newCustomer.purchase(testProduct1.getId());
     newCustomer.purchase(testProduct2.getId());

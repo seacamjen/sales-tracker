@@ -4,6 +4,8 @@ import spark.ModelAndView;
 import spark.template.velocity.VelocityTemplateEngine;
 import static spark.Spark.*;
 import java.util.NoSuchElementException;
+import java.util.List;
+import java.util.ArrayList;
 
 public class App {
   public static void main(String[] args) {
@@ -13,6 +15,7 @@ public class App {
     get("/", (request, response) -> {
       Map<String, Object> model = new HashMap<String, Object>();
       model.put("products", Product.all());
+      model.put("categories", Category.all());
       model.put("user", request.session().attribute("user"));
       model.put("template", "templates/index.vtl");
       return new ModelAndView(model, layout);
@@ -22,10 +25,25 @@ public class App {
       Map<String, Object> model = new HashMap<String, Object>();
       model.put("products", Product.all());
       model.put("customers", Customer.all());
+      model.put("categories", Category.all());
       model.put("monthlyTotal", Purchase.monthlyTotalSales());
       model.put("quarterlyTotal", Purchase.quarterlyTotalSales());
       model.put("user", request.session().attribute("user"));
       model.put("template", "templates/admin.vtl");
+      return new ModelAndView(model, layout);
+    }, new VelocityTemplateEngine());
+
+    get("/products", (request, response) -> {
+      Map<String, Object> model = new HashMap<String, Object>();
+      String[] categories = request.queryParamsValues("category");
+      List<Product> allProducts = new ArrayList<Product>();
+      for (String category : categories) {
+        allProducts.addAll(Product.getCategoryProducts(Integer.parseInt(category)));
+      }
+      model.put("products", allProducts);
+      model.put("categories", Category.all());
+      model.put("user", request.session().attribute("user"));
+      model.put("template", "templates/index.vtl");
       return new ModelAndView(model, layout);
     }, new VelocityTemplateEngine());
 
@@ -34,7 +52,8 @@ public class App {
       String productName = request.queryParams("productName");
       int productPrice = Integer.parseInt(request.queryParams("productPrice"));
       String productDescription = request.queryParams("productDescription");
-      Product newProduct = new Product(productName, productPrice, productDescription);
+      int productCategory = Integer.parseInt(request.queryParams("productCategory"));
+      Product newProduct = new Product(productName, productPrice, productDescription, productCategory);
       newProduct.save();
       response.redirect("/admin");
       return new ModelAndView(model, layout);

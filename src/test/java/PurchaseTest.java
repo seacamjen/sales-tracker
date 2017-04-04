@@ -119,9 +119,9 @@ public class PurchaseTest {
 
   @Test
   public void monthlySales_returnsListOfAllSalesForLast30Days() {
-    Product testProduct1 = new Product("Jersey", 10, "Awesome Jersey");
+    Product testProduct1 = new Product("Jersey", 10, "Awesome Jersey", 1);
     testProduct1.save();
-    Product testProduct2 = new Product("Ball", 20, "Awesome Ball");
+    Product testProduct2 = new Product("Ball", 20, "Awesome Ball", 2);
     testProduct2.save();
     Purchase testPurchase1 = new Purchase(1, testProduct1.getId());
     testPurchase1.save();
@@ -154,9 +154,9 @@ public class PurchaseTest {
 
   @Test
   public void quarterlySales_returnsListOfAllSalesForLast30Days() {
-    Product testProduct1 = new Product("Jersey", 10, "Awesome Jersey");
+    Product testProduct1 = new Product("Jersey", 10, "Awesome Jersey", 1);
     testProduct1.save();
-    Product testProduct2 = new Product("Ball", 20, "Awesome Ball");
+    Product testProduct2 = new Product("Ball", 20, "Awesome Ball", 2);
     testProduct2.save();
     Purchase testPurchase1 = new Purchase(1, testProduct1.getId());
     testPurchase1.save();
@@ -189,9 +189,9 @@ public class PurchaseTest {
 
   @Test
   public void monthlyTotalSales_returnsListOfAllSalesForLast30Days() {
-    Product testProduct1 = new Product("Jersey", 10, "Awesome Jersey");
+    Product testProduct1 = new Product("Jersey", 10, "Awesome Jersey", 1);
     testProduct1.save();
-    Product testProduct2 = new Product("Ball", 20, "Awesome Ball");
+    Product testProduct2 = new Product("Ball", 20, "Awesome Ball", 2);
     testProduct2.save();
     Purchase testPurchase1 = new Purchase(1, testProduct1.getId());
     testPurchase1.save();
@@ -206,9 +206,9 @@ public class PurchaseTest {
 
   @Test
   public void quarterlyTotalSales_returnsListOfAllSalesForLast30Days() {
-    Product testProduct1 = new Product("Jersey", 10, "Awesome Jersey");
+    Product testProduct1 = new Product("Jersey", 10, "Awesome Jersey", 1);
     testProduct1.save();
-    Product testProduct2 = new Product("Ball", 20, "Awesome Ball");
+    Product testProduct2 = new Product("Ball", 20, "Awesome Ball", 2);
     testProduct2.save();
     Purchase testPurchase1 = new Purchase(1, testProduct1.getId());
     testPurchase1.save();

@@ -5,12 +5,14 @@ public class Product {
   private String name;
   private int price;
   private String description;
+  private int categoryId;
   private int id;
 
-  public Product(String name, int price, String description) {
+  public Product(String name, int price, String description, int categoryId) {
     this.name = name;
     this.price = price;
     this.description = description;
+    this.categoryId = categoryId;
   }
 
   public String getName() {
@@ -29,6 +31,10 @@ public class Product {
     return id;
   }
 
+  public int getCategoryId() {
+    return categoryId;
+  }
+
   @Override
   public boolean equals(Object otherProduct) {
     if (!(otherProduct instanceof Product)) {
@@ -38,17 +44,19 @@ public class Product {
       return this.getName().equals(newProduct.getName()) &&
              this.getDescription().equals(newProduct.getDescription()) &&
              this.getPrice() == newProduct.getPrice() &&
+             this.getCategoryId() == newProduct.getCategoryId() &&
              this.getId() == newProduct.getId();
     }
   }
 
   public void save() {
     try (Connection con = DB.sql2o.open()) {
-      String sql = "INSERT INTO products (name, price, description) VALUES (:name, :price, :description);";
+      String sql = "INSERT INTO products (name, price, description, categoryId) VALUES (:name, :price, :description, :categoryId);";
       this.id = (int) con.createQuery(sql, true)
         .addParameter("name", name)
         .addParameter("price", price)
         .addParameter("description", description)
+        .addParameter("categoryId", categoryId)
         .executeUpdate()
         .getKey();
     }
@@ -80,13 +88,14 @@ public class Product {
     }
   }
 
-  public void update(String name, int price, String description) {
+  public void update(String name, int price, String description, int categoryId) {
     try(Connection con = DB.sql2o.open()) {
-      String sql = "UPDATE products SET (name, price, description) = (:name, :price, :description) WHERE id = :id;";
+      String sql = "UPDATE products SET (name, price, description, categoryId) = (:name, :price, :description, :categoryId) WHERE id = :id;";
       con.createQuery(sql)
         .addParameter("name", name)
         .addParameter("price", price)
         .addParameter("description", description)
+        .addParameter("categoryId", categoryId)
         .addParameter("id", id)
         .executeUpdate();
     }
@@ -98,6 +107,15 @@ public class Product {
       String sql = "SELECT * FROM products WHERE lower(name) LIKE lower(:newInput) OR lower(description) LIKE lower(:newInput);";
       return con.createQuery(sql)
         .addParameter("newInput", newInput)
+        .executeAndFetch(Product.class);
+    }
+  }
+
+  public static List<Product> getCategoryProducts(int categoryId) {
+    try (Connection con = DB.sql2o.open()) {
+      String sql = "SELECT * FROM products WHERE categoryId = :categoryId;";
+      return con.createQuery(sql)
+        .addParameter("categoryId", categoryId)
         .executeAndFetch(Product.class);
     }
   }
