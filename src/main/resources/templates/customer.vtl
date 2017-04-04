@@ -2,6 +2,11 @@
 <div class="row">
   <div class="col-md-8 col-md-offset-2">
     <div class="well">
+      <button type="button" class="btn btn-default pull-right" data-toggle="modal" data-target="#customerUpdateModal">Edit</button>
+      <h3>Hello $customer.getName()</h3>
+      <h4><span class="label label-default">email:</span> $customer.getEmail()</h4>
+    </div>
+    <div class="well">
       <h3>Previous Purchases</h3>
       <table class="table table-condensed table-hover">
         <tr>
@@ -17,6 +22,31 @@
         </tr>
         #end
       </table>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="customerUpdateModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Update</h4>
+      </div>
+      <div class="modal-body">
+        <form id="customerUpdate" action="/customers/$customer.getId()/update" method="post">
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input value="$customer.getName()" class="form-control" type="text" name="name" required>
+            <label for="email">Email</label>
+            <input value="$customer.getEmail()" class="form-control" type="text" name="email" required>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" form="customerUpdate" class="btn btn-success pull-right">Update</button>
+        <button type="button" class="btn btn-default pull-right" data-dismiss="modal">Cancel</button>
+      </div>
     </div>
   </div>
 </div>

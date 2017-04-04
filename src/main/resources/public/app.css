@@ -31,3 +31,7 @@ img {
 hr {
   border-top: 2px solid darkgray;
 }
+
+input[type=checkbox].filterList {
+  margin: 10px 0 0;
+}

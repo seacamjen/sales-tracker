@@ -27,8 +27,11 @@ public class App {
       model.put("products", Product.all());
       model.put("customers", Customer.all());
       model.put("categories", Category.all());
+      model.put("monthlyReport", Purchase.monthlySales());
+      model.put("quarterlyReport", Purchase.quarterlySales());
       model.put("monthlyTotal", Purchase.monthlyTotalSales());
       model.put("quarterlyTotal", Purchase.quarterlyTotalSales());
+      model.put("datetime", DateFormat.getDateTimeInstance());
       model.put("user", request.session().attribute("user"));
       model.put("template", "templates/admin.vtl");
       return new ModelAndView(model, layout);
@@ -119,6 +122,16 @@ public class App {
       Customer customer = Customer.find(Integer.parseInt(request.params(":id")));
       customer.setAdmin();
       response.redirect("/admin");
+      return new ModelAndView(model, layout);
+    }, new VelocityTemplateEngine());
+
+    post("/customers/:id/update", (request, response) -> {
+      Map<String, Object> model = new HashMap<String, Object>();
+      Customer customer = Customer.find(Integer.parseInt(request.params(":id")));
+      String name = request.queryParams("name");
+      String email = request.queryParams("email");
+      customer.update(email, name);
+      response.redirect(request.headers("Referer"));
       return new ModelAndView(model, layout);
     }, new VelocityTemplateEngine());
 

@@ -61,4 +61,13 @@ public class Category {
     }
   }
 
+  public Integer productCount() {
+    try (Connection con = DB.sql2o.open()) {
+      String sql = "SELECT COUNT(id) FROM products WHERE categoryId = :id;";
+      return con.createQuery(sql)
+        .addParameter("id", id)
+        .executeScalar(Integer.class);
+    }
+  }
+
 }

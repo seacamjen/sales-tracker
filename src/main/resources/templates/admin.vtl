@@ -56,7 +56,7 @@
         <div class="panel-heading" role="tab" id="headingOne">
           <h4 class="panel-title">
             <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-              Products
+              Products <span class="badge">$products.size()</span>
             </a>
           </h4>
         </div>
@@ -84,7 +84,7 @@
         <div class="panel-heading" role="tab" id="headingTwo">
           <h4 class="panel-title">
             <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-              Users
+              Users <span class="badge">$customers.size()</span>
             </a>
           </h4>
         </div>
@@ -126,7 +126,25 @@
         </div>
         <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
           <div class="panel-body">
-
+            <table class="table table-condensed table-hover">
+              <tr>
+                <th>Purchase Date</th>
+                <th>Product Name</th>
+                <th>Price</th>
+              </tr>
+              #foreach($purchase in $monthlyReport)
+                <tr>
+                  <td>$datetime.format($purchase.get("purchasedate"))</td>
+                  <td>$purchase.get("name")</td>
+                  <td>$ $purchase.get("price")</td>
+                </tr>
+              #end
+              <tr>
+                <td></td>
+                <td>Monthly Total</td>
+                <td>$ $monthlyTotal</td>
+              </tr>
+            </table>
           </div>
         </div>
       </div>
@@ -141,7 +159,25 @@
         </div>
         <div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
           <div class="panel-body">
-
+            <table class="table table-condensed table-hover">
+              <tr>
+                <th>Purchase Date</th>
+                <th>Product Name</th>
+                <th>Price</th>
+              </tr>
+              #foreach($purchase in $quarterlyReport)
+                <tr>
+                  <td>$datetime.format($purchase.get("purchasedate"))</td>
+                  <td>$purchase.get("name")</td>
+                  <td>$ $purchase.get("price")</td>
+                </tr>
+              #end
+              <tr>
+                <td></td>
+                <td>Quarterly Total</td>
+                <td>$ $quarterlyTotal</td>
+              </tr>
+            </table>
           </div>
         </div>
       </div>
