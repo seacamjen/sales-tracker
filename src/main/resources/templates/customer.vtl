@@ -1,0 +1,22 @@
+
+<div class="row">
+  <div class="col-md-8 col-md-offset-2">
+    <div class="well">
+      <h3>Previous Purchases</h3>
+      <table class="table table-condensed table-hover">
+        <tr>
+          <th>Name</th>
+          <th>Purchase Date</th>
+          <th>Price</th>
+        </tr>
+        #foreach ($purchase in $customer.getHistory())
+        <tr>
+          <td>$purchase.get("name")</td>
+          <td>$datetime.format($purchase.get("purchasedate"))</td>
+          <td>$ $purchase.get("price")</td>
+        </tr>
+        #end
+      </table>
+    </div>
+  </div>
+</div>

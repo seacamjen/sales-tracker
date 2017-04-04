@@ -20,7 +20,7 @@
           #end
         </ul>
         #if($user)
-          <p class="navbar-text navbar-right">Signed in as $user.getName()</p><a href="/logout" type="button" class="btn btn-default navbar-btn navbar-right">Sign out</a>
+          <p class="navbar-text navbar-right">Signed in as <a href="/customers/$user.getId()">$user.getName()</a></p><a href="/logout" type="button" class="btn btn-default navbar-btn navbar-right">Sign out</a>
         #else
           <button class="btn btn-default navbar-btn navbar-right" id="dLabel" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Login <span class="caret"></span></button>
           <form id="loginForm" class="dropdown-menu pull-right" aria-labelledby="dLabel" action="/login" method="post">
@@ -35,7 +35,7 @@
             </div>
           </form>
         #end
-        <form class="navbar-form navbar-right" action="/search" method="post">
+        <form class="navbar-form navbar-right" action="/search">
           <div class="form-group">
             <input type="text" name="searchInput" class="form-control" placeholder="search" required>
           </div>

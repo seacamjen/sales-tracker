@@ -72,7 +72,7 @@
                 <tr>
                   <td>$product.getName()</td>
                   <td>$product.getPrice()</td>
-                  <td>$product.getType()</td>
+                  <td>$product.getCategoryName()</td>
                 </tr>
               #end
             </table>
@@ -107,7 +107,6 @@
                       <form action="/customers/$customer.getId()/makeAdmin" method="post">
                         <button type="submit" class="btn btn-xs btn-default">Make Admin</button>
                       </form>
-                      <!-- <a class="btn btn-xs btn-default" href="/customers/$customer.getId()/makeAdmin">Make Admin</a> -->
                     #end
                   </td>
                 </tr>

@@ -9,17 +9,26 @@
           #end
         </div>
         <div class="form-group">
-          <button type="submit">Filter</button>
+          <button class="btn btn-default btn-block" type="submit">Filter</button>
         </div>
       </form>
     </div>
   </div>
-  <div class="col-md-8">
-      #foreach($product in $products)
-        <h4><a href="/products/$product.getId()">$product.getName()</a></h4>
-        <h5>$product.getDescription()</h5>
-        <h5>$product.getPrice()</h5>
-      #end
+  <div class="col-md-10">
+    #foreach($product in $products)
+      <div class="well">
+        <div class="row">
+          <div class="col-md-2">
+            <img src="/images/placeholder.png" alt="placeholder image" class="smallIcon"/>
+            <h5 class="text-center">$ $product.getPrice()</h5>
+          </div>
+          <div class="col-md-10">
+            <h4><a href="/products/$product.getId()">$product.getName()</a></h4>
+            <h5>$product.getDescription()</h5>
+          </div>
+        </div>
+      </div>
+    #end
   </div>
 </div>
 <!--index.vtl-->

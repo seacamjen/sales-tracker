@@ -1,0 +1,59 @@
+<div class="class">
+  <div class="col-md-8 col-md-offset-2">
+    <div class="panel panel-default">
+      <div class="panel-heading" role="tab" id="headingOne">
+        <h4 class="panel-title">
+          <a role="button" data-toggle="collapse" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+            Products
+          </a>
+        </h4>
+      </div>
+      <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+        <div class="panel-body">
+          <table class="table table-condensed table-hover">
+            <tr>
+              <th>Product Name</th>
+              <th>Product Price</th>
+              <th>Category</th>
+            </tr>
+            #foreach($product in $products)
+              <tr>
+                <td><a href="/products/$product.getId()">$product.getName()</a></td>
+                <td><a href="/products/$product.getId()">$ $product.getPrice()</a></td>
+                <td><a href="/products/$product.getId()">$product.getCategoryName()</a></td>
+              </tr>
+            #end
+          </table>
+        </div>
+      </div>
+    </div>
+
+    #if($customers)
+      <div class="panel panel-default">
+        <div class="panel-heading" role="tab" id="headingTwo">
+          <h4 class="panel-title">
+            <a role="button" data-toggle="collapse" href="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+              Customers
+            </a>
+          </h4>
+        </div>
+        <div id="collapseTwo" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingTwo">
+          <div class="panel-body">
+            <table class="table table-condensed table-hover">
+              <tr>
+                <th>User Name</th>
+                <th>User Email</th>
+              </tr>
+              #foreach($customer in $customers)
+                <tr>
+                  <td>$customer.getName()</td>
+                  <td>$customer.getEmail()</td>
+                </tr>
+              #end
+            </table>
+          </div>
+        </div>
+      </div>
+    #end
+  </div>
+</div>

@@ -120,4 +120,13 @@ public class Product {
     }
   }
 
+  public String getCategoryName() {
+    try (Connection con = DB.sql2o.open()) {
+      String sql = "SELECT name FROM categories WHERE id = :categoryId;";
+      return con.createQuery(sql)
+        .addParameter("categoryId", categoryId)
+        .executeAndFetchFirst(String.class);
+    }
+  }
+
 }

@@ -6,6 +6,7 @@ import static spark.Spark.*;
 import java.util.NoSuchElementException;
 import java.util.List;
 import java.util.ArrayList;
+import java.text.DateFormat;
 
 public class App {
   public static void main(String[] args) {
@@ -37,13 +38,34 @@ public class App {
       Map<String, Object> model = new HashMap<String, Object>();
       String[] categories = request.queryParamsValues("category");
       List<Product> allProducts = new ArrayList<Product>();
-      for (String category : categories) {
-        allProducts.addAll(Product.getCategoryProducts(Integer.parseInt(category)));
+      if (!(categories == null)) {
+        for (String category : categories) {
+          allProducts.addAll(Product.getCategoryProducts(Integer.parseInt(category)));
+        }
+        model.put("products", allProducts);
+      } else {
+        response.redirect("/");
       }
-      model.put("products", allProducts);
       model.put("categories", Category.all());
       model.put("user", request.session().attribute("user"));
       model.put("template", "templates/index.vtl");
+      return new ModelAndView(model, layout);
+    }, new VelocityTemplateEngine());
+
+    get("/products/:id", (request, response) -> {
+      Map<String, Object> model = new HashMap<String, Object>();
+      model.put("product", Product.find(Integer.parseInt(request.params(":id"))));
+      model.put("user", request.session().attribute("user"));
+      model.put("template", "templates/product.vtl");
+      return new ModelAndView(model, layout);
+    }, new VelocityTemplateEngine());
+
+    post("/products/:id/purchase", (request, response) -> {
+      Map<String, Object> model = new HashMap<String, Object>();
+      Customer customer = request.session().attribute("user");
+      customer.purchase(Integer.parseInt(request.params(":id")));
+      String url = String.format("/customers/%d", customer.getId());
+      response.redirect(url);
       return new ModelAndView(model, layout);
     }, new VelocityTemplateEngine());
 
@@ -78,7 +100,17 @@ public class App {
         customer.save();
       }
       request.session().attribute("user", customer);
-      response.redirect("/");
+      response.redirect(request.headers("Referer"));
+      return new ModelAndView(model, layout);
+    }, new VelocityTemplateEngine());
+
+    get("/customers/:id", (request, response) -> {
+      Map<String, Object> model = new HashMap<String, Object>();
+      Customer customer = Customer.find(Integer.parseInt(request.params(":id")));
+      model.put("customer", customer);
+      model.put("datetime", DateFormat.getDateTimeInstance());
+      model.put("user", request.session().attribute("user"));
+      model.put("template", "templates/customer.vtl");
       return new ModelAndView(model, layout);
     }, new VelocityTemplateEngine());
 
@@ -89,5 +121,19 @@ public class App {
       response.redirect("/admin");
       return new ModelAndView(model, layout);
     }, new VelocityTemplateEngine());
+
+    get("/search", (request, response) -> {
+      Map<String, Object> model = new HashMap<String, Object>();
+      String search = request.queryParams("searchInput");
+      Customer customer = request.session().attribute("user");
+      if ((customer != null) && (customer.getAdmin())) {
+        model.put("customers", Customer.search(search));
+      }
+      model.put("products", Product.search(search));
+      model.put("user", request.session().attribute("user"));
+      model.put("template", "templates/results.vtl");
+      return new ModelAndView(model, layout);
+    }, new VelocityTemplateEngine());
+
   }
 }

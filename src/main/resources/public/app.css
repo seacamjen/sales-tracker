@@ -9,3 +9,25 @@ body {
 #loginForm > .form-group {
   margin: 15px;
 }
+
+.smallIcon {
+  width: 100px;
+  height: auto;
+}
+
+img {
+  margin: auto;
+  display: block;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.modal-footer button{
+  margin-left: 10px;
+}
+
+hr {
+  border-top: 2px solid darkgray;
+}
